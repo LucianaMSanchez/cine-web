@@ -1,5 +1,6 @@
 import React from "react";
 import "./BottomBanner.css";
+import { Link } from "react-router-dom";
 
 const BottomBanner = () => {
   const items = [
@@ -42,16 +43,22 @@ const BottomBanner = () => {
                     className="img-fluid rounded"
                   />
                 </div>
-                <div className="col-md-8">
+                <div className="banner-content col-md-8">
                   <h5 className="banner-title text-center">{item.title}</h5>
                   <span className="banner-text">{item.span}</span>
+                  <Link to={""} className="btn btn-primary btn-sm">
+                    See!
+                  </Link>
                 </div>
               </>
             ) : (
               <>
-                <div className="col-md-8">
+                <div className="banner-content col-md-8">
                   <h5 className="banner-title text-center">{item.title}</h5>
                   <span className="banner-text">{item.span}</span>
+                  <Link to={""} className="btn btn-primary btn-sm">
+                    See!
+                  </Link>
                 </div>
                 <div className="col-md-4">
                   <img

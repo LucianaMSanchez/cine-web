@@ -1,0 +1,18 @@
+.sidebar-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1050;
+    border: none;
+    background-color: transparent;
+  }
+  
+  .nav-link {
+    text-decoration: none;
+    color: black;
+  }
+  
+  .nav-link:hover {
+    color: blue;
+  }
+  

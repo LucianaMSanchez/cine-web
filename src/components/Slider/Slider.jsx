@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Carousel, Button, Modal } from "react-bootstrap";
+import 'bootstrap-icons/font/bootstrap-icons.css';
 import "./Slider.css";
 
 const Slider = () => {
@@ -50,12 +51,13 @@ const Slider = () => {
                 src={slide.image}
                 alt={`Slide ${index + 1}`}
               />
-              <Carousel.Caption>
+              <Carousel.Caption className="caption-trailer-button">
                 <Button
                   variant="primary"
+                  className="btn btn-primary btn-sm"
                   onClick={() => handleShow(slide.trailer)}
                 >
-                  Ver Tráiler
+                 <i class="bi bi-eye"></i>  Tráiler
                 </Button>
               </Carousel.Caption>
             </Carousel.Item>

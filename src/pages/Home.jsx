@@ -1,6 +1,7 @@
 import React from "react";
 import MovieList from "../components/MovieList/MovieList";
 import Slider from "../components/Slider/Slider";
+import Footer from "../components/Footer/Footer";
 import BottomBanner from "../components/BottomBanner/BottomBanner";
 
 const Home = () => {
@@ -9,6 +10,7 @@ const Home = () => {
       <Slider />
       <MovieList />
       <BottomBanner/>
+      <Footer />
     </>
   );
 };

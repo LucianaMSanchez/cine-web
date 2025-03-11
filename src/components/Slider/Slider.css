@@ -4,3 +4,19 @@
   padding: 3rem 10rem;
   background-color: rgba(34, 31, 31, 0.281);
 }
+.caption-trailer-button {
+  .btn-sm {
+    background-color: rgb(44, 3, 82);
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin: 0;
+    padding: 0.5rem 0.9rem;
+    border-radius: 7px;
+    border: none;
+  }
+
+  .btn-sm:hover {
+    background-color: rgb(68, 54, 82);
+    border: none;
+  }
+}

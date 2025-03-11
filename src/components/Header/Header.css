@@ -1,24 +1,22 @@
 .header {
-  background: #00092c;
+  background: #0e0131;
   padding: 1rem 0;
-  text-align: center;
-  justify-content: space-between;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  width: 100vw;
-  position: absolute;
-  top: 0;
-  left: 0;
-  .header-title {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #fff;
-    text-shadow: 2px 4px 8px rgb(255, 141, 10);
-  }
-  .header-title:hover {
-    color: #c5bfbf;
-    cursor: pointer;
-  }
 }
+
+.header-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 2px 4px 8px rgb(255, 141, 10);
+  margin-left: 10px; 
+}
+
+.header-title:hover {
+  color: #c5bfbf;
+  cursor: pointer;
+}
+
 .header-title-link {
   text-decoration: none;
   color: #fff;
@@ -28,5 +26,5 @@
   font-size: 1rem;
   color: #fff;
   font-style: italic;
-  margin-left: 1rem;
+  font-weight: 600;
 }

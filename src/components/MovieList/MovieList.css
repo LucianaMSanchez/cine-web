@@ -9,7 +9,7 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   transition: transform 0.2s ease-in-out;
   border: solid 2px rgb(54, 48, 56);
-  margin-top: 5rem;
+  margin-top: 2rem;
   margin-bottom: 5rem;
   .movie-image {
     width: 100%;
@@ -45,4 +45,16 @@
 
 .movie-card:hover {
   transform: scale(1.05);
+}
+
+.dropdown-filter {
+  justify-self: flex-end;
+  margin-top: 2rem;
+}
+
+.movie-card-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }

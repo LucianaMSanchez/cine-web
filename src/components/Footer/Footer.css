@@ -1,0 +1,22 @@
+.footer {
+  width: 100vw;
+  background: #420419;
+  padding: 20px 0;
+  position: absolute;
+  left: 0;
+  bottom: -85rem;
+}
+
+.footer-address {
+  font-size: 16px;
+  color: #ffffff;
+}
+
+.footer-map-link {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.footer-map-link:hover {
+  text-decoration: underline;
+}
