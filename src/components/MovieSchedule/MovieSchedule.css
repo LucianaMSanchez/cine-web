@@ -1,0 +1,35 @@
+.table {
+  text-align: center;
+}
+
+.text-success {
+  font-weight: bold;
+}
+
+.btn-detail {
+  background-color: rgb(44, 3, 82);
+  font-size: 0.7rem;
+  font-weight: 700;
+  margin: 0;
+  padding: 0.3rem 0.7rem;
+  border-radius: 5px;
+  border: none;
+}
+
+.btn-detail:hover {
+  background-color: rgb(68, 54, 82);
+  border: none;
+}
+
+.btn-edit {
+  background-color: transparent;
+}
+.btn-delete {
+  background-color: transparent;
+  color: black;
+}
+.line-function-content {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}

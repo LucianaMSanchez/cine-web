@@ -1,6 +1,6 @@
 import React from "react";
-import "./BottomBanner.css";
 import { Link } from "react-router-dom";
+import "./BottomBanner.css";
 
 const BottomBanner = () => {
   const items = [

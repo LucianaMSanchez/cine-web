@@ -6,8 +6,9 @@ import Home from "./pages/Home";
 import MovieDetail from "./pages/MovieDetail";
 import CreateFunction from "./pages/CreateFunction";
 import UpdateFunction from "./pages/UpdateFunction";
+import FunctionList from "./pages/FunctionList";
 import "bootstrap/dist/css/bootstrap.min.css";
-import './index.css';
+import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -15,8 +16,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <MainLayout>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/create-function" element={<CreateFunction/>} />
-          <Route path="/update-function" element={<UpdateFunction/>} />
+          <Route path="/functions" element={<FunctionList />} />
+          <Route path="/create-function" element={<CreateFunction />} />
+          <Route path="/update-function" element={<UpdateFunction />} />
           <Route path="/movie/:id" element={<MovieDetail />} />
         </Routes>
       </MainLayout>

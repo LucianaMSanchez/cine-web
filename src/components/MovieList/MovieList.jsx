@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Row, Col, Card, Button, Dropdown } from "react-bootstrap";
+import { Row, Col, Card, Dropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import "./MovieList.css";
 
@@ -69,9 +69,16 @@ const MovieList = () => {
         </Dropdown.Menu>
       </Dropdown>
 
-      <Row className="mt-4 justify-content-between">
+      <Row className="mt-4 justify-content-around">
         {filteredMovies.map((movie) => (
-          <Col key={movie.id} xs={6} sm={4} md={3} lg={2} className="movie-card-content mb-4">
+          <Col
+            key={movie.id}
+            xs={6}
+            sm={4}
+            md={3}
+            lg={2}
+            className="movie-card-content mb-4"
+          >
             <Card className="movie-card">
               <Card.Img
                 variant="top"

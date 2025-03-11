@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Form, Button, Container } from "react-bootstrap";
+import { Form, Button, Container, Alert } from "react-bootstrap";
 import DatePicker from "react-datepicker";
+import {
+  validatePrice,
+  validateDate,
+  validateDirectorFunctions,
+  validateInternationalMovieFunctions,
+} from "../../utils/validators";
 import "react-datepicker/dist/react-datepicker.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./FormUpdate.css";
@@ -14,10 +20,20 @@ const movies = [
 ];
 
 const FormUpdateFunction = ({ existingFunction }) => {
-  const [selectedMovie, setSelectedMovie] = useState(existingFunction?.movie || "");
-  const [selectedDirector, setSelectedDirector] = useState(existingFunction?.director || "");
+  const [selectedMovie, setSelectedMovie] = useState(
+    existingFunction?.movie || ""
+  );
+  const [selectedDirector, setSelectedDirector] = useState(
+    existingFunction?.director || ""
+  );
   const [date, setDate] = useState(existingFunction?.date || new Date());
   const [price, setPrice] = useState(existingFunction?.price || "");
+  const [errors, setErrors] = useState({
+    movie: "",
+    director: "",
+    date: "",
+    price: "",
+  });
 
   useEffect(() => {
     if (existingFunction) {
@@ -33,6 +49,9 @@ const FormUpdateFunction = ({ existingFunction }) => {
     const director = movies.find((m) => m.title === movie)?.director || "";
     setSelectedMovie(movie);
     setSelectedDirector(director);
+
+    const movieError = movie ? "" : "Debe seleccionar una película.";
+    setErrors((prevErrors) => ({ ...prevErrors, movie: movieError }));
   };
 
   const handleDirectorChange = (event) => {
@@ -40,11 +59,61 @@ const FormUpdateFunction = ({ existingFunction }) => {
     const movie = movies.find((m) => m.director === director)?.title || "";
     setSelectedDirector(director);
     setSelectedMovie(movie);
+
+    const directorError = director ? "" : "Debe seleccionar un director.";
+    setErrors((prevErrors) => ({ ...prevErrors, director: directorError }));
+  };
+
+  const handlePriceChange = (e) => {
+    const value = e.target.value;
+    setPrice(value);
+
+    const priceError = validatePrice(value);
+    setErrors((prevErrors) => ({ ...prevErrors, price: priceError }));
+  };
+
+  const handleDateChange = (date) => {
+    setDate(date);
+
+    const dateError = validateDate(date);
+    setErrors((prevErrors) => ({ ...prevErrors, date: dateError }));
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    alert(`Película: ${selectedMovie}\nDirector: ${selectedDirector}\nFecha: ${date}\nPrecio: ${price}`);
+    setErrors({ movie: "", director: "", date: "", price: "" });
+
+    let validationError = validatePrice(price);
+    if (validationError) {
+      setErrors((prevErrors) => ({ ...prevErrors, price: validationError }));
+      return;
+    }
+
+    validationError = validateDate(date);
+    if (validationError) {
+      setErrors((prevErrors) => ({ ...prevErrors, date: validationError }));
+      return;
+    }
+
+    validationError = validateDirectorFunctions(selectedDirector, date, []);
+    if (validationError) {
+      setErrors((prevErrors) => ({ ...prevErrors, director: validationError }));
+      return;
+    }
+
+    validationError = validateInternationalMovieFunctions(
+      selectedMovie,
+      [],
+      movies
+    );
+    if (validationError) {
+      setErrors((prevErrors) => ({ ...prevErrors, movie: validationError }));
+      return;
+    }
+
+    alert(
+      `Película: ${selectedMovie}\nDirector: ${selectedDirector}\nFecha: ${date}\nPrecio: ${price}`
+    );
   };
 
   return (
@@ -61,6 +130,11 @@ const FormUpdateFunction = ({ existingFunction }) => {
               </option>
             ))}
           </Form.Select>
+          {errors.movie && (
+            <Alert variant="danger" className="small-alert">
+              {errors.movie}
+            </Alert>
+          )}
         </Form.Group>
 
         <Form.Group className="mb-3">
@@ -73,17 +147,27 @@ const FormUpdateFunction = ({ existingFunction }) => {
               </option>
             ))}
           </Form.Select>
+          {errors.director && (
+            <Alert variant="danger" className="small-alert">
+              {errors.director}
+            </Alert>
+          )}
         </Form.Group>
 
         <Form.Group className="mb-3">
           <Form.Label>Fecha y Hora</Form.Label> <br />
           <DatePicker
             selected={date}
-            onChange={(date) => setDate(date)}
+            onChange={handleDateChange}
             showTimeSelect
             dateFormat="Pp"
             className="form-control"
           />
+          {errors.date && (
+            <Alert variant="danger" className="small-alert">
+              {errors.date}
+            </Alert>
+          )}
         </Form.Group>
 
         <Form.Group className="mb-3">
@@ -91,9 +175,14 @@ const FormUpdateFunction = ({ existingFunction }) => {
           <Form.Control
             type="number"
             value={price}
-            onChange={(e) => setPrice(e.target.value)}
+            onChange={handlePriceChange}
             placeholder="Ingrese el precio"
           />
+          {errors.price && (
+            <Alert variant="danger" className="small-alert">
+              {errors.price}
+            </Alert>
+          )}
         </Form.Group>
 
         <Button variant="primary" type="submit">

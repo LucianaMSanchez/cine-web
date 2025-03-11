@@ -8,7 +8,7 @@ const Footer = () => {
       <Row>
         <Col className="text-center">
           <p className="footer-address">
-            Dirección: Corrientes 1120, Bella Vista, Corrientes, Argentina
+            Corrientes 1120, Bella Vista, Corrientes, Argentina
           </p>
           <a
             href="https://www.google.com/maps?q=Corrientes+214,+Bella+Vista,+Corrientes,+Argentina"
@@ -16,7 +16,7 @@ const Footer = () => {
             rel="noopener noreferrer"
             className="footer-map-link"
           >
-            Ver en Google Maps
+            <i class="bi bi-geo-alt"></i> Ver en Google Maps
           </a>
         </Col>
       </Row>
