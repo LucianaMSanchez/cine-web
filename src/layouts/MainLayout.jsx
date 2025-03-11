@@ -1,11 +1,15 @@
 import React from "react";
 import { Container } from "react-bootstrap";
+import Header from "../components/Header/Header";
 
 const MainLayout = ({ children }) => {
   return (
-    <Container>
-      {children}
-    </Container>
+    <>
+      <Header /> 
+      <Container className="mt-4">
+        {children}
+      </Container>
+    </>
   );
 };
 

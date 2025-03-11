@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Carousel, Button, Modal } from "react-bootstrap";
+import "./Slider.css";
 
 const Slider = () => {
   const slides = [
@@ -40,26 +41,27 @@ const Slider = () => {
 
   return (
     <>
-      <Carousel>
-        {slides.map((slide, index) => (
-          <Carousel.Item key={index}>
-            <img
-              className="d-block w-100"
-              src={slide.image}
-              alt={`Slide ${index + 1}`}
-            />
-            <Carousel.Caption>
-              <Button
-                variant="primary"
-                onClick={() => handleShow(slide.trailer)}
-              >
-                Ver Tráiler
-              </Button>
-            </Carousel.Caption>
-          </Carousel.Item>
-        ))}
-      </Carousel>
-
+      <div className="slider-container">
+        <Carousel>
+          {slides.map((slide, index) => (
+            <Carousel.Item key={index}>
+              <img
+                className="d-block w-100"
+                src={slide.image}
+                alt={`Slide ${index + 1}`}
+              />
+              <Carousel.Caption>
+                <Button
+                  variant="primary"
+                  onClick={() => handleShow(slide.trailer)}
+                >
+                  Ver Tráiler
+                </Button>
+              </Carousel.Caption>
+            </Carousel.Item>
+          ))}
+        </Carousel>
+      </div>
       <Modal show={show} onHide={handleClose} centered>
         <Modal.Header closeButton>
           <Modal.Title>Tráiler Oficial</Modal.Title>

@@ -1,0 +1,6 @@
+.slider-container {
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  padding: 3rem 10rem;
+  background-color: rgba(34, 31, 31, 0.281);
+}

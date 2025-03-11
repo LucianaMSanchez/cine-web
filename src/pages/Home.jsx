@@ -1,6 +1,6 @@
 import React from "react";
-import MovieList from "../components/MovieList";
-import Slider from "../components/Slider";
+import MovieList from "../components/MovieList/MovieList";
+import Slider from "../components/Slider/Slider";
 
 const Home = () => {
   return (
