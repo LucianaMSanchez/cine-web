@@ -21,7 +21,7 @@ const MovieList = () => {
             <Card.Body className="text-center">
               <Card.Title className="movie-title">{movie.title}</Card.Title>
               <Link to={`/movie/${movie.id}`} className="btn btn-primary btn-sm">
-                Ver Detalles
+                Tickets!
               </Link>
             </Card.Body>
           </Card>

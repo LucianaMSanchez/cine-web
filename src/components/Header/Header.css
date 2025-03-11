@@ -1,18 +1,27 @@
 .header {
-  background: linear-gradient(to right, #b21f1f, #fdbb2d);
+  background: #00092c;
   padding: 1rem 0;
   text-align: center;
+  justify-content: space-between;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   width: 100vw;
   position: absolute;
   top: 0;
   left: 0;
+  .header-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 2px 4px 8px rgb(255, 141, 10);
+  }
+  .header-title:hover {
+    color: #c5bfbf;
+    cursor: pointer;
+  }
 }
-.header-title {
-  font-size: 2rem;
-  font-weight: bold;
-  color: white;
-  text-shadow: 2px 2px 4px rgba(114, 113, 113, 0.5);
+.header-title-link {
+  text-decoration: none;
+  color: #fff;
 }
 
 .header-subtitle {
