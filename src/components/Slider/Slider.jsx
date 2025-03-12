@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Carousel, Button, Modal } from "react-bootstrap";
-import 'bootstrap-icons/font/bootstrap-icons.css';
 import "./Slider.css";
 
 const Slider = () => {
@@ -31,6 +30,7 @@ const Slider = () => {
       trailer: "https://www.youtube.com/embed/3BxE9osMt5U",
     },
   ];
+
   const [show, setShow] = useState(false);
   const [selectedTrailer, setSelectedTrailer] = useState("");
 
@@ -38,32 +38,34 @@ const Slider = () => {
     setSelectedTrailer(trailer);
     setShow(true);
   };
+
   const handleClose = () => setShow(false);
+
+  const slidesItems = slides.map((slide, index) => (
+    <Carousel.Item key={index}>
+      <img
+        className="d-block w-100"
+        src={slide.image}
+        alt={`Slide ${index + 1}`}
+      />
+      <Carousel.Caption className="caption-trailer-button">
+        <Button
+          variant="primary"
+          className="btn btn-primary btn-sm"
+          onClick={() => handleShow(slide.trailer)}
+        >
+          <i className="bi bi-eye"></i> Tráiler
+        </Button>
+      </Carousel.Caption>
+    </Carousel.Item>
+  ));
 
   return (
     <>
       <div className="slider-container">
-        <Carousel>
-          {slides.map((slide, index) => (
-            <Carousel.Item key={index}>
-              <img
-                className="d-block w-100"
-                src={slide.image}
-                alt={`Slide ${index + 1}`}
-              />
-              <Carousel.Caption className="caption-trailer-button">
-                <Button
-                  variant="primary"
-                  className="btn btn-primary btn-sm"
-                  onClick={() => handleShow(slide.trailer)}
-                >
-                 <i class="bi bi-eye"></i>  Tráiler
-                </Button>
-              </Carousel.Caption>
-            </Carousel.Item>
-          ))}
-        </Carousel>
+        <Carousel>{slidesItems}</Carousel>
       </div>
+
       <Modal show={show} onHide={handleClose} centered>
         <Modal.Header closeButton>
           <Modal.Title>Tráiler Oficial</Modal.Title>

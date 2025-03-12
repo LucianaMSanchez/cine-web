@@ -1,4 +1,3 @@
-import React from "react";
 import { useParams, Link } from "react-router-dom";
 import { Container, Card, Button, ListGroup } from "react-bootstrap";
 import "./Detail.css";

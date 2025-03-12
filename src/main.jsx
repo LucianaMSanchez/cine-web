@@ -7,7 +7,9 @@ import MovieDetail from "./pages/MovieDetail";
 import CreateFunction from "./pages/CreateFunction";
 import UpdateFunction from "./pages/UpdateFunction";
 import FunctionList from "./pages/FunctionList";
+import "react-datepicker/dist/react-datepicker.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
 import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(

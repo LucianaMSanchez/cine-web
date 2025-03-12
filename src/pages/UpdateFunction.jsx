@@ -1,4 +1,3 @@
-import React from "react";
 import FormUpdateFunction from "../components/FormUpdate/FormUpdate";
 
 const UpdateFunction = () => {

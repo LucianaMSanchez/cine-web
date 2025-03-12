@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Form, Button, Container, Alert } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import {
@@ -7,8 +7,6 @@ import {
   validateDirectorFunctions,
   validateInternationalMovieFunctions,
 } from "../../utils/validators";
-import "react-datepicker/dist/react-datepicker.css";
-import "bootstrap/dist/css/bootstrap.min.css";
 import "./FormCreate.css";
 
 const movies = [
@@ -34,7 +32,6 @@ const FormCreateFunction = () => {
   const [price, setPrice] = useState("");
   const [errors, setErrors] = useState({
     movie: "",
-    director: "",
     date: "",
     price: "",
   });
@@ -48,21 +45,12 @@ const FormCreateFunction = () => {
   const handleMovieChange = (event) => {
     const movie = event.target.value;
     const director = movies.find((m) => m.title === movie)?.director || "";
+
     setSelectedMovie(movie);
     setSelectedDirector(director);
 
     const movieError = movie ? "" : "Debe seleccionar una película.";
     setErrors((prevErrors) => ({ ...prevErrors, movie: movieError }));
-  };
-
-  const handleDirectorChange = (event) => {
-    const director = event.target.value;
-    const movie = movies.find((m) => m.director === director)?.title || "";
-    setSelectedDirector(director);
-    setSelectedMovie(movie);
-
-    const directorError = director ? "" : "Debe seleccionar un director.";
-    setErrors((prevErrors) => ({ ...prevErrors, director: directorError }));
   };
 
   const handlePriceChange = (e) => {
@@ -82,7 +70,7 @@ const FormCreateFunction = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    setErrors({ movie: "", director: "", date: "", price: "" });
+    setErrors({ movie: "", date: "", price: "" });
 
     let validationError = validatePrice(price);
     if (validationError) {
@@ -102,7 +90,7 @@ const FormCreateFunction = () => {
       existingFunctions
     );
     if (validationError) {
-      setErrors((prevErrors) => ({ ...prevErrors, director: validationError }));
+      alert(validationError);
       return;
     }
 
@@ -112,7 +100,7 @@ const FormCreateFunction = () => {
       movies
     );
     if (validationError) {
-      setErrors((prevErrors) => ({ ...prevErrors, movie: validationError }));
+      alert(validationError);
       return;
     }
 
@@ -144,19 +132,7 @@ const FormCreateFunction = () => {
 
         <Form.Group className="mb-3">
           <Form.Label>Director</Form.Label>
-          <Form.Select value={selectedDirector} onChange={handleDirectorChange}>
-            <option value="">Selecciona un director</option>
-            {movies.map((movie) => (
-              <option key={movie.director} value={movie.director}>
-                {movie.director}
-              </option>
-            ))}
-          </Form.Select>
-          {errors.director && (
-            <Alert variant="danger" className="small-alert">
-              {errors.director}
-            </Alert>
-          )}
+          <Form.Control type="text" value={selectedDirector} disabled />
         </Form.Group>
 
         <Form.Group className="mb-3">

@@ -1,75 +1,33 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import BannerItem from "../BannerItem/BannerItem";
 import "./BottomBanner.css";
 
-const BottomBanner = () => {
-  const items = [
-    {
-      id: 1,
-      title: "Drinks & Food",
-      img: "https://www.shutterstock.com/image-vector/popcorn-drink-filmstrip-600nw-69929482.jpg",
-      span: "Enjoy the convenience of mobile ordering. Simply place your order before your movie and it will be ready at your selected time when you arrive. Skip the line and enjoy the show!",
-    },
-    {
-      id: 2,
-      title: "VIP seats",
-      img: "https://img.freepik.com/premium-vector/vip-member-golden-emblem_79145-245.jpg?semt=ais_hybrid",
-      span: "Prepare to enjoy the movies like never before. Experience VIP seats with all of the enhanced technology that awaits. Best show ever is promise!",
-    },
-    {
-      id: 3,
-      title: "Special deals",
-      img: "https://img.freepik.com/premium-vector/special-weekend-deals-promotional-ecommerce-offer-design-marketing-symbol_1280603-2568.jpg",
-      span: "Every day before 4pm, movie tickets are 25% off the evening base ticket prices. It’s always perfect day to see a movie and save!",
-    },
-  ];
+const items = [
+  {
+    id: 1,
+    title: "Comidas & Bebidas",
+    img: "https://www.shutterstock.com/image-vector/popcorn-drink-filmstrip-600nw-69929482.jpg",
+    span: "Disfruta de la comodidad de ordenar desde tu móvil. Simplemente haz tu pedido antes de la película y estará listo a la hora seleccionada cuando llegues. ¡Sáltate la fila y disfruta del espectáculo!",
+  },
+  {
+    id: 2,
+    title: "Asientos VIP",
+    img: "https://img.freepik.com/premium-vector/vip-member-golden-emblem_79145-245.jpg?semt=ais_hybrid",
+    span: "Prepárate para disfrutar las películas como nunca antes. Vive la experiencia de los asientos VIP con toda la tecnología mejorada que te espera. ¡Prometemos el mejor espectáculo!",
+  },
+  {
+    id: 3,
+    title: "Ofertas Especiales",
+    img: "https://img.freepik.com/premium-vector/special-weekend-deals-promotional-ecommerce-offer-design-marketing-symbol_1280603-2568.jpg",
+    span: "Todos los fines de semana antes de las 4 p.m., las entradas de cine tienen un 25% de descuento sobre el precio base. ¡Siempre es un buen momento del día para ver una película y ahorrar!",
+  },
+];
 
+const BottomBanner = () => {
   return (
     <div className="bottom-banner">
       <div className="container">
         {items.map((item, index) => (
-          <div
-            key={item.id}
-            className={`row align-items-center banner-row ${
-              index % 2 === 0 ? "image-left" : "image-right"
-            }`}
-          >
-            {index % 2 === 0 ? (
-              <>
-                <div className="col-md-4">
-                  <img
-                    src={item.img}
-                    alt={item.title}
-                    className="img-fluid rounded"
-                  />
-                </div>
-                <div className="banner-content col-md-8">
-                  <h5 className="banner-title text-center">{item.title}</h5>
-                  <span className="banner-text">{item.span}</span>
-                  <Link to={""} className="btn btn-primary btn-sm">
-                    See!
-                  </Link>
-                </div>
-              </>
-            ) : (
-              <>
-                <div className="banner-content col-md-8">
-                  <h5 className="banner-title text-center">{item.title}</h5>
-                  <span className="banner-text">{item.span}</span>
-                  <Link to={""} className="btn btn-primary btn-sm">
-                    See!
-                  </Link>
-                </div>
-                <div className="col-md-4">
-                  <img
-                    src={item.img}
-                    alt={item.title}
-                    className="img-fluid rounded"
-                  />
-                </div>
-              </>
-            )}
-          </div>
+          <BannerItem key={item.id} item={item} isImageLeft={index % 2 === 0} />
         ))}
       </div>
     </div>

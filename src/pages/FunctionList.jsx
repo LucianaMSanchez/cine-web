@@ -1,4 +1,3 @@
-import React from "react";
 import MovieSchedule from "../components/MovieSchedule/MovieSchedule";
 
 const FunctionList = () => {

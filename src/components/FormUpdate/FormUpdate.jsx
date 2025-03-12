@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Form, Button, Container, Alert } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import {
@@ -7,8 +7,6 @@ import {
   validateDirectorFunctions,
   validateInternationalMovieFunctions,
 } from "../../utils/validators";
-import "react-datepicker/dist/react-datepicker.css";
-import "bootstrap/dist/css/bootstrap.min.css";
 import "./FormUpdate.css";
 
 const movies = [
@@ -20,12 +18,8 @@ const movies = [
 ];
 
 const FormUpdateFunction = ({ existingFunction }) => {
-  const [selectedMovie, setSelectedMovie] = useState(
-    existingFunction?.movie || ""
-  );
-  const [selectedDirector, setSelectedDirector] = useState(
-    existingFunction?.director || ""
-  );
+  const [selectedMovie, setSelectedMovie] = useState(existingFunction?.movie || "");
+  const [selectedDirector, setSelectedDirector] = useState(existingFunction?.director || "");
   const [date, setDate] = useState(existingFunction?.date || new Date());
   const [price, setPrice] = useState(existingFunction?.price || "");
   const [errors, setErrors] = useState({

@@ -1,8 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Offcanvas, Button, ListGroup } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap-icons/font/bootstrap-icons.css";
 import "./SideBarMenu.css";
 
 const SidebarMenu = () => {

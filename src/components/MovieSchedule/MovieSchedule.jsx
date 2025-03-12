@@ -1,4 +1,3 @@
-import React from "react";
 import { Container, Table, Button } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import "./MovieSchedule.css";
@@ -49,6 +48,59 @@ const MovieSchedule = () => {
     navigate(`/update-function`);
   };
 
+  const handleDelete = (movieId, functionIndex) => {
+    console.log(
+      `Eliminar película ID ${movieId}, función index ${functionIndex}`
+    );
+  };
+
+  const movieRows = movies.map((movie) => {
+    const functionList = movie.functions.map((func, index) => (
+      <div key={index} className="line-function-content">
+        {func.date.toLocaleDateString()} -{" "}
+        {func.date.toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        })}{" "}
+        - <span className="ms-2 text-success">${func.price}</span>
+        <div className="mt-2">
+          <Button
+            variant="warning"
+            size="sm"
+            onClick={() => handleEdit(movie.id, index)}
+            className="btn-edit me-2"
+          >
+            <i className="bi bi-pencil-square"></i>
+          </Button>
+          <Button
+            variant="danger"
+            size="sm"
+            onClick={() => handleDelete(movie.id, index)}
+            className="btn-delete"
+          >
+            <i className="bi bi-x-circle"></i>
+          </Button>
+        </div>
+      </div>
+    ));
+
+    return (
+      <tr key={movie.id}>
+        <td>{movie.title}</td>
+        <td>{movie.director}</td>
+        <td>{movie.country}</td>
+        <td>{functionList}</td>
+        <td>
+          <Link to={`/movie/${movie.id}`}>
+            <Button variant="primary" size="sm" className="btn-detail">
+              Ver Detalles
+            </Button>
+          </Link>
+        </td>
+      </tr>
+    );
+  });
+
   return (
     <Container className="container-table-schedule mt-4">
       <h2 className="text-center mb-4">Cartelera de Películas</h2>
@@ -62,52 +114,7 @@ const MovieSchedule = () => {
             <th>Acción</th>
           </tr>
         </thead>
-        <tbody>
-          {movies.map((movie) => (
-            <tr key={movie.id}>
-              <td>{movie.title}</td>
-              <td>{movie.director}</td>
-              <td>{movie.country}</td>
-              <td>
-                {movie.functions.map((func, index) => (
-                  <div key={index} className="line-function-content">
-                    {func.date.toLocaleDateString()} -{" "}
-                    {func.date.toLocaleTimeString([], {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}{" "}
-                    -<span className="ms-2 text-success">${func.price}</span>
-                    <div className="mt-2">
-                      <Button
-                        variant="warning"
-                        size="sm"
-                        onClick={() => handleEdit(movie.id, index)}
-                        className="btn-edit me-2"
-                      >
-                        <i className="bi bi-pencil-square"></i>
-                      </Button>
-                      <Button
-                        variant="danger"
-                        className="btn-delete"
-                        size="sm"
-                        onClick={() => handleDelete(movie.id, index)}
-                      >
-                        <i className="bi bi-x-circle"></i>
-                      </Button>
-                    </div>
-                  </div>
-                ))}
-              </td>
-              <td>
-                <Link to={`/movie/${movie.id}`}>
-                  <Button variant="primary" size="sm" className="btn-detail">
-                    Ver Detalles
-                  </Button>
-                </Link>
-              </td>
-            </tr>
-          ))}
-        </tbody>
+        <tbody>{movieRows}</tbody>
       </Table>
 
       <div className="text-center mt-3">

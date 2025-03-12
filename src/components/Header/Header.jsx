@@ -1,4 +1,3 @@
-import React from "react";
 import { Navbar, Container, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import SidebarMenu from "../SideBarMenu/SideBarMenu";

@@ -1,4 +1,3 @@
-import React from "react";
 import MovieList from "../components/MovieList/MovieList";
 import Slider from "../components/Slider/Slider";
 import Footer from "../components/Footer/Footer";
