@@ -20,7 +20,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="/" element={<Home />} />
           <Route path="/functions" element={<FunctionList />} />
           <Route path="/create-function" element={<CreateFunction />} />
-          <Route path="/update-function" element={<UpdateFunction />} />
+          <Route path="/update-function/:id" element={<UpdateFunction />} />
           <Route path="/movie/:id" element={<MovieDetail />} />
         </Routes>
       </MainLayout>

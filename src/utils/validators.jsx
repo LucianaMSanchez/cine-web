@@ -1,6 +1,6 @@
 export const validatePrice = (price) => {
-  if (isNaN(price) || price <= 0) {
-    return "El precio debe ser un número positivo.";
+  if (isNaN(price) || price <= 0 || price > 1000) {
+    return "El precio debe ser entre 1 y 1000.";
   }
   return null;
 };
@@ -12,35 +12,3 @@ export const validateDate = (date) => {
   return null;
 };
 
-export const validateDirectorFunctions = (
-  selectedDirector,
-  date,
-  existingFunctions
-) => {
-  const directorFunctions = existingFunctions.filter(
-    (func) =>
-      func.director === selectedDirector &&
-      func.date.toDateString() === date.toDateString()
-  );
-  if (directorFunctions.length >= 10) {
-    return "Un director solo puede tener un máximo de 10 funciones por día.";
-  }
-  return null;
-};
-
-export const validateInternationalMovieFunctions = (
-  selectedMovie,
-  existingFunctions,
-  movies
-) => {
-  const movie = movies.find((m) => m.title === selectedMovie);
-  if (movie?.isInternational) {
-    const movieFunctions = existingFunctions.filter(
-      (func) => func.director === movie.director
-    );
-    if (movieFunctions.length >= 8) {
-      return "Las películas internacionales tienen un límite de 8 funciones.";
-    }
-  }
-  return null;
-};

@@ -7,8 +7,10 @@ const Home = () => {
   return (
     <>
       <Slider />
-      <MovieList />
-      <BottomBanner/>
+      <div className="movie-list-container">
+        <MovieList />
+      </div>
+      <BottomBanner />
       <Footer />
     </>
   );

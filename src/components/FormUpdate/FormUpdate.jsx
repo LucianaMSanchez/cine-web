@@ -1,149 +1,163 @@
-import { useState, useEffect } from "react";
-import { Form, Button, Container, Alert } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { Form, Button, Container, Alert, Spinner } from "react-bootstrap";
 import DatePicker from "react-datepicker";
-import {
-  validatePrice,
-  validateDate,
-  validateDirectorFunctions,
-  validateInternationalMovieFunctions,
-} from "../../utils/validators";
+import { validatePrice, validateDate } from "../../utils/validators";
 import "./FormUpdate.css";
 
-const movies = [
-  { title: "Titanic", director: "James Cameron" },
-  { title: "Parasites", director: "Bong Joon-ho" },
-  { title: "El secreto de sus ojos", director: "Juan José Campanella" },
-  { title: "Relatos salvajes", director: "Damián Szifrón" },
-  { title: "Inception", director: "Christopher Nolan" },
-];
+const API_URL_MOVIES = "http://localhost:5206/movies";
+const API_URL_UPDATE_FUNCTION = "http://localhost:5206/functions";
 
-const FormUpdateFunction = ({ existingFunction }) => {
-  const [selectedMovie, setSelectedMovie] = useState(existingFunction?.movie || "");
-  const [selectedDirector, setSelectedDirector] = useState(existingFunction?.director || "");
-  const [date, setDate] = useState(existingFunction?.date || new Date());
-  const [price, setPrice] = useState(existingFunction?.price || "");
-  const [errors, setErrors] = useState({
-    movie: "",
+const FormUpdateFunction = () => {
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const [movies, setMovies] = useState([]);
+  const [formData, setFormData] = useState({
+    movieId: "",
     director: "",
-    date: "",
+    directorId: "",
+    date: new Date(),
     price: "",
   });
+  const [errors, setErrors] = useState({});
+  const [messages, setMessages] = useState({ success: "", error: "" });
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (existingFunction) {
-      setSelectedMovie(existingFunction.movie);
-      setSelectedDirector(existingFunction.director);
-      setDate(existingFunction.date);
-      setPrice(existingFunction.price);
+    const fetchMovies = async () => {
+      try {
+        const response = await fetch(API_URL_MOVIES);
+        if (!response.ok) throw new Error("Error al obtener películas.");
+
+        const data = await response.json();
+        setMovies(data);
+      } catch (error) {
+        setMessages({ success: "", error: error.message });
+      }
+    };
+
+    const fetchFunction = async () => {
+      try {
+        const response = await fetch(`${API_URL_UPDATE_FUNCTION}/${id}`);
+        if (!response.ok) throw new Error("Error al obtener la función.");
+
+        const data = await response.json();
+        setFormData({
+          movieId: data.movieId.toString(),
+          director: data.director,
+          directorId: data.directorId,
+          date: new Date(data.date),
+          price: data.price.toString(),
+        });
+      } catch (error) {
+        setMessages({ success: "", error: error.message });
+      }
+    };
+
+    fetchMovies();
+    fetchFunction();
+  }, [id]);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+
+    if (name === "movieId") {
+      const selectedMovie = movies.find((m) => m.id === parseInt(value));
+      setFormData((prev) => ({
+        ...prev,
+        movieId: value,
+        director: selectedMovie?.director || "",
+        directorId: selectedMovie?.directorId || "",
+      }));
+      setErrors((prev) => ({
+        ...prev,
+        movieId: value ? "" : "Debe seleccionar una película.",
+      }));
     }
-  }, [existingFunction]);
 
-  const handleMovieChange = (event) => {
-    const movie = event.target.value;
-    const director = movies.find((m) => m.title === movie)?.director || "";
-    setSelectedMovie(movie);
-    setSelectedDirector(director);
-
-    const movieError = movie ? "" : "Debe seleccionar una película.";
-    setErrors((prevErrors) => ({ ...prevErrors, movie: movieError }));
-  };
-
-  const handleDirectorChange = (event) => {
-    const director = event.target.value;
-    const movie = movies.find((m) => m.director === director)?.title || "";
-    setSelectedDirector(director);
-    setSelectedMovie(movie);
-
-    const directorError = director ? "" : "Debe seleccionar un director.";
-    setErrors((prevErrors) => ({ ...prevErrors, director: directorError }));
-  };
-
-  const handlePriceChange = (e) => {
-    const value = e.target.value;
-    setPrice(value);
-
-    const priceError = validatePrice(value);
-    setErrors((prevErrors) => ({ ...prevErrors, price: priceError }));
+    if (name === "price") {
+      setFormData((prev) => ({ ...prev, price: value }));
+      setErrors((prev) => ({ ...prev, price: validatePrice(value) }));
+    }
   };
 
   const handleDateChange = (date) => {
-    setDate(date);
-
-    const dateError = validateDate(date);
-    setErrors((prevErrors) => ({ ...prevErrors, date: dateError }));
+    setFormData((prev) => ({ ...prev, date }));
+    setErrors((prev) => ({ ...prev, date: validateDate(date) }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    setErrors({ movie: "", director: "", date: "", price: "" });
+    setMessages({ success: "", error: "" });
 
-    let validationError = validatePrice(price);
-    if (validationError) {
-      setErrors((prevErrors) => ({ ...prevErrors, price: validationError }));
+    const { movieId, directorId, price, date } = formData;
+    const validationErrors = {
+      movieId: movieId ? "" : "Debe seleccionar una película.",
+      date: validateDate(date),
+      price: validatePrice(price),
+    };
+
+    if (Object.values(validationErrors).some((err) => err)) {
+      setErrors(validationErrors);
       return;
     }
 
-    validationError = validateDate(date);
-    if (validationError) {
-      setErrors((prevErrors) => ({ ...prevErrors, date: validationError }));
-      return;
-    }
+    setLoading(true);
+    try {
+      const response = await fetch(`${API_URL_UPDATE_FUNCTION}/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          movieId: parseInt(movieId),
+          directorId,
+          price: parseFloat(price),
+          date: date.toISOString().split("T")[0],
+          time: date.toTimeString().split(" ")[0],
+        }),
+      });
 
-    validationError = validateDirectorFunctions(selectedDirector, date, []);
-    if (validationError) {
-      setErrors((prevErrors) => ({ ...prevErrors, director: validationError }));
-      return;
-    }
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData || "Error al actualizar la función.");
+      }
 
-    validationError = validateInternationalMovieFunctions(
-      selectedMovie,
-      [],
-      movies
-    );
-    if (validationError) {
-      setErrors((prevErrors) => ({ ...prevErrors, movie: validationError }));
-      return;
+      setMessages({ success: "Función actualizada exitosamente.", error: "" });
+      setTimeout(() => {
+        navigate(`/movie/${movieId}`);
+      }, 2000);
+    } catch (error) {
+      setMessages({ success: "", error: error.message });
+    } finally {
+      setLoading(false);
+      setTimeout(() => setMessages({ success: "", error: "" }), 3000);
     }
-
-    alert(
-      `Película: ${selectedMovie}\nDirector: ${selectedDirector}\nFecha: ${date}\nPrecio: ${price}`
-    );
   };
 
   return (
     <Container className="form-container mt-4">
-      <h2>Actualizar Función</h2>
+      <h2 className="text-center mb-4 text-white">Actualizar Función</h2>
+
+      {messages.success && <Alert variant="success">{messages.success}</Alert>}
+      {messages.error && <Alert variant="danger">{messages.error}</Alert>}
+
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3">
           <Form.Label>Película</Form.Label>
-          <Form.Select value={selectedMovie} onChange={handleMovieChange}>
+          <Form.Select
+            name="movieId"
+            value={formData.movieId}
+            onChange={handleInputChange}
+          >
             <option value="">Selecciona una película</option>
             {movies.map((movie) => (
-              <option key={movie.title} value={movie.title}>
-                {movie.title}
+              <option key={movie.id} value={movie.id}>
+                {movie.name}
               </option>
             ))}
           </Form.Select>
-          {errors.movie && (
+          {errors.movieId && (
             <Alert variant="danger" className="small-alert">
-              {errors.movie}
-            </Alert>
-          )}
-        </Form.Group>
-
-        <Form.Group className="mb-3">
-          <Form.Label>Director</Form.Label>
-          <Form.Select value={selectedDirector} onChange={handleDirectorChange}>
-            <option value="">Selecciona un director</option>
-            {movies.map((movie) => (
-              <option key={movie.director} value={movie.director}>
-                {movie.director}
-              </option>
-            ))}
-          </Form.Select>
-          {errors.director && (
-            <Alert variant="danger" className="small-alert">
-              {errors.director}
+              {errors.movieId}
             </Alert>
           )}
         </Form.Group>
@@ -151,7 +165,7 @@ const FormUpdateFunction = ({ existingFunction }) => {
         <Form.Group className="mb-3">
           <Form.Label>Fecha y Hora</Form.Label> <br />
           <DatePicker
-            selected={date}
+            selected={formData.date}
             onChange={handleDateChange}
             showTimeSelect
             dateFormat="Pp"
@@ -168,8 +182,9 @@ const FormUpdateFunction = ({ existingFunction }) => {
           <Form.Label>Precio</Form.Label>
           <Form.Control
             type="number"
-            value={price}
-            onChange={handlePriceChange}
+            name="price"
+            value={formData.price}
+            onChange={handleInputChange}
             placeholder="Ingrese el precio"
           />
           {errors.price && (
@@ -179,8 +194,12 @@ const FormUpdateFunction = ({ existingFunction }) => {
           )}
         </Form.Group>
 
-        <Button variant="primary" type="submit">
-          Actualizar Función
+        <Button variant="primary" type="submit" disabled={loading}>
+          {loading ? (
+            <Spinner as="span" animation="border" size="sm" />
+          ) : (
+            "Actualizar Función"
+          )}
         </Button>
       </Form>
     </Container>

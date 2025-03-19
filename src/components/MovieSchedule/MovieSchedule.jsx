@@ -1,73 +1,85 @@
+import { useEffect, useState } from "react";
 import { Container, Table, Button } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import "./MovieSchedule.css";
 
-const movies = [
-  {
-    id: 1,
-    title: "Titanic",
-    director: "James Cameron",
-    country: "Internacional",
-    functions: [
-      { date: new Date("2025-03-15T14:00:00"), price: 100 },
-      { date: new Date("2025-03-15T18:00:00"), price: 120 },
-      { date: new Date("2025-03-15T21:30:00"), price: 150 },
-    ],
-  },
-  {
-    id: 2,
-    title: "Inception",
-    director: "Christopher Nolan",
-    country: "Internacional",
-    functions: [
-      { date: new Date("2025-03-16T13:00:00"), price: 110 },
-      { date: new Date("2025-03-16T17:00:00"), price: 130 },
-      { date: new Date("2025-03-16T20:00:00"), price: 160 },
-    ],
-  },
-  {
-    id: 3,
-    title: "El secreto de sus ojos",
-    director: "Juan José Campanella",
-    country: "Nacional",
-    functions: [
-      { date: new Date("2025-03-17T15:30:00"), price: 190 },
-      { date: new Date("2025-03-17T19:30:00"), price: 110 },
-      { date: new Date("2025-03-17T22:00:00"), price: 130 },
-    ],
-  },
-];
+const API_URL_FUNCTIONS = "http://localhost:5206/functions";
 
 const MovieSchedule = () => {
   const navigate = useNavigate();
+  const [functions, setFunctions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const handleEdit = (movieId, functionIndex) => {
-    console.log(
-      `Editar película ID ${movieId}, función index ${functionIndex}`
-    );
-    navigate(`/update-function`);
+  useEffect(() => {
+    const fetchFunctions = async () => {
+      setLoading(true);
+      setError(null);
+
+      try {
+        const response = await fetch(API_URL_FUNCTIONS);
+        if (!response.ok) {
+          throw new Error("Error al obtener funciones.");
+        }
+        const data = await response.json();
+        setFunctions(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFunctions();
+  }, []);
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>Error: {error}</p>;
+  }
+
+  const handleEdit = (id) => {
+    navigate(`/update-function/${id}`);
   };
 
-  const handleDelete = (movieId, functionIndex) => {
-    console.log(
-      `Eliminar película ID ${movieId}, función index ${functionIndex}`
-    );
+  const handleDelete = async (id) => {
+    if (window.confirm("¿Estás seguro de que deseas eliminar esta función?")) {
+      try {
+        const response = await fetch(`${API_URL_FUNCTIONS}/${id}`, {
+          method: "DELETE",
+        });
+
+        if (!response.ok) {
+          throw new Error("Error al eliminar la función");
+        }
+
+        setFunctions((prevFunctions) =>
+          prevFunctions.map((movie) => ({
+            ...movie,
+            functions: movie.functions.filter((func) => func.id !== id),
+          }))
+        );
+
+        alert("Función eliminada con éxito");
+      } catch (error) {
+        alert(`Error: ${error.message}`);
+      }
+    }
   };
 
-  const movieRows = movies.map((movie) => {
-    const functionList = movie.functions.map((func, index) => (
+  const movieRows = functions.map((movie) => {
+    const functionRows = movie.functions.map((func, index) => (
       <div key={index} className="line-function-content">
-        {func.date.toLocaleDateString()} -{" "}
-        {func.date.toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        })}{" "}
-        - <span className="ms-2 text-success">${func.price}</span>
+        {func.date} - {func.time} -{" "}
+        <span className="ms-2 text-success">${func.price}</span>
         <div className="mt-2">
           <Button
             variant="warning"
             size="sm"
-            onClick={() => handleEdit(movie.id, index)}
+            onClick={() => handleEdit(func.id)}
             className="btn-edit me-2"
           >
             <i className="bi bi-pencil-square"></i>
@@ -75,7 +87,7 @@ const MovieSchedule = () => {
           <Button
             variant="danger"
             size="sm"
-            onClick={() => handleDelete(movie.id, index)}
+            onClick={() => handleDelete(func.id)}
             className="btn-delete"
           >
             <i className="bi bi-x-circle"></i>
@@ -85,13 +97,12 @@ const MovieSchedule = () => {
     ));
 
     return (
-      <tr key={movie.id}>
-        <td>{movie.title}</td>
-        <td>{movie.director}</td>
-        <td>{movie.country}</td>
-        <td>{functionList}</td>
+      <tr key={movie.movieName}>
+        <td>{movie.movieName}</td>
+        <td>{movie.functions[0]?.director}</td>
+        <td>{functionRows}</td>
         <td>
-          <Link to={`/movie/${movie.id}`}>
+          <Link to={`/movie/${movie.functions[0]?.movieId}`}>
             <Button variant="primary" size="sm" className="btn-detail">
               Ver Detalles
             </Button>
@@ -103,13 +114,12 @@ const MovieSchedule = () => {
 
   return (
     <Container className="container-table-schedule mt-4">
-      <h2 className="text-center mb-4">Cartelera de Películas</h2>
+      <h2 className="text-center mb-4 text-white">Cartelera de Películas</h2>
       <Table striped bordered hover responsive>
         <thead>
           <tr>
             <th>Película</th>
             <th>Director</th>
-            <th>Origen</th>
             <th>Funciones</th>
             <th>Acción</th>
           </tr>
